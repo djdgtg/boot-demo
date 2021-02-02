@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * description
@@ -20,10 +21,16 @@ public class IndexController {
     @GetMapping("{page}")
     public String page(@PathVariable String page, Model model) {
         User principal = (User) SecurityUtils.getSubject().getPrincipal();
-        if (principal != null && "chat".equals(page)) {
+        if (principal != null) {
             model.addAttribute("user", principal);
         }
         return page;
+    }
+
+    @GetMapping("favicon.ico")
+    @ResponseBody
+    public String favicon() {
+        return "favicon.ico";
     }
 
 }
