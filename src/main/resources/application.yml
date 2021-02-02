@@ -1,0 +1,32 @@
+server:
+  port: 80
+
+spring:
+  freemarker:
+    suffix: .ftlh
+  redis:
+    host: localhost
+    port: 6379
+  application:
+    name: boot-demo
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/${spring.application.name}?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: root
+    password: root
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/*Mapper.xml
+
+# MinIo文件服务器
+minio:
+  endpoint: http://localhost:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+
+logging:
+  file:
+    path: ./logs
+  level:
+    root: info
+    com.spring.boot.demo.mapper: debug
