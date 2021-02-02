@@ -17,7 +17,6 @@ window.onload = function () {
         }
         document.getElementById("send").onclick = function (ev) {
             let content = $('#content').code();
-            console.log(content)
             let data = '{"type":"2","username":"' + username + '","content":"' + content + '"}';
             webSocket.send(data);
             let date = new Date();
@@ -43,15 +42,16 @@ window.onload = function () {
         }
         webSocket.onmessage = function (ev) {
             let data = ev.data;
-            let obj = eval('(' + data + ')');
+            //let obj = eval('(' + data + ')');
+            let obj = ev.data;
             let type = obj.type;
             switch (type) {
                 case 0:
                     document.getElementsByClassName("right")[0]
-                        .innerHTML += "<p id=" + obj.senSessionId + "><font color='blue'>" + obj.username + "</font></p>";
+                        .innerHTML += "<p id=" + obj.username + "><font color='blue'>" + obj.username + "</font></p>";
                     break;
                 case 1:
-                    let id = obj.senSessionId;
+                    let id = obj.username;
                     let parent = document.getElementsByClassName("right")[0];
                     let child = document.getElementById(id);
                     parent.removeChild(child);

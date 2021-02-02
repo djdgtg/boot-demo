@@ -80,7 +80,7 @@ public class WebSocketListener {
             Session toSession = sessionEntry.getValue();
             // 排除掉自己
             if (!session.getId().equals(toSession.getId()) && toSession.isOpen()) {
-                log.info("服务端给客户端[{}]发送消息{}", toSession.getId(), message);
+                log.info("服务端给客户端[{}]发送消息:{}", toSession.getId(), message);
                 toSession.getAsyncRemote().sendText(message);
             }
         }
