@@ -3,7 +3,11 @@ package com.spring.boot.demo.websocket;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.websocket.*;
+import javax.websocket.OnClose;
+import javax.websocket.OnError;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.util.Map;
@@ -66,7 +70,7 @@ public class WebSocketListener {
 
     @OnError
     public void onError(Session session, Throwable error) {
-        log.error("发生错误:{}",session.getId());
+        log.error("发生错误:{}", session.getId());
         error.printStackTrace();
     }
 

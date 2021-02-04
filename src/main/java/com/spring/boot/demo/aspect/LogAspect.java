@@ -4,13 +4,12 @@ package com.spring.boot.demo.aspect;
 import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,9 +26,8 @@ import java.util.Map;
  */
 @Component
 @Aspect
+@Slf4j
 public class LogAspect {
-
-    private static Logger log = LoggerFactory.getLogger(LogAspect.class);
 
     private final ObjectMapper objectMapper;
 

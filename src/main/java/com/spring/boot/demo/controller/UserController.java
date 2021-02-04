@@ -1,10 +1,11 @@
 package com.spring.boot.demo.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.spring.boot.demo.controller.vo.PageVO;
 import com.spring.boot.demo.entity.User;
 import com.spring.boot.demo.enums.Limit;
 import com.spring.boot.demo.service.UserService;
+import com.spring.boot.demo.utils.DateUtils;
 import com.spring.boot.demo.utils.ExcelUtils;
 import com.spring.boot.demo.utils.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -13,14 +14,17 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -28,8 +32,8 @@ import java.util.concurrent.TimeUnit;
  * 服务控制器
  *
  * @author qinchao
- * @since 2020-12-01 14:45:28
  * @description 由 Mybatisplus Code Generator 创建
+ * @since 2020-12-01 14:45:28
  */
 @Slf4j
 @RestController
@@ -52,7 +56,7 @@ public class UserController {
     private ExcelUtils excelUtils;
 
     @Autowired
-    private RedisTemplate<String,Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * Description 登陆校验
@@ -61,10 +65,10 @@ public class UserController {
      **/
     @GetMapping(value = "checkLogin")
     @Limit(period = 10, count = 50)
-    public Result login(String username, String password) {
-        ValueOperations<String,Object> operations = redisTemplate.opsForValue();
+    public Result<Object> login(String username, String password) {
+        ValueOperations<String, Object> operations = redisTemplate.opsForValue();
         //1小时内5次密码错误，当前账号禁止登陆
-        String key="user:login:"+username;
+        String key = "user:login:" + username;
         operations.setIfAbsent(key, times, duration, unit);
         if ((Integer) operations.get(key) <= 0) {
             return Result.build(400, "当前账号登陆失败次数过多，被锁定", 0);
@@ -84,24 +88,25 @@ public class UserController {
     }
 
     @GetMapping("{id}")
-    public User getById(@PathVariable Long id){
+    public User getById(@PathVariable Long id) {
         return userService.getById(id);
     }
 
     @PostMapping("page")
-    public IPage getById(@RequestBody Page<User> page){
-        return userService.page(page);
+    public IPage<User> getById(@RequestBody PageVO<User> pageVO) {
+        return userService.page(pageVO);
     }
 
     @GetMapping("export")
-    public void export(HttpServletResponse response){
-        List<User> list=userService.list();
-        excelUtils.export(list,response,"用户-"+ LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+    public void export(HttpServletResponse response, User user) {
+        List<User> list = userService.list(user);
+        excelUtils.export(list, response, "用户-" + DateUtils.dateString(LocalDate.now()), User.class);
     }
 
     @PostMapping("import")
-    public List<User> export(MultipartFile file){
+    public List<User> export(MultipartFile file) {
         return excelUtils.getList(file, User.class);
     }
+
 
 }

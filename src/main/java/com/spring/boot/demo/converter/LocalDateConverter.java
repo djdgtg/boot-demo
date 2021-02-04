@@ -11,16 +11,16 @@ import com.alibaba.excel.enums.CellDataTypeEnum;
 import com.alibaba.excel.metadata.CellData;
 import com.alibaba.excel.metadata.GlobalConfiguration;
 import com.alibaba.excel.metadata.property.ExcelContentProperty;
+import com.spring.boot.demo.utils.DateUtils;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Component
 public class LocalDateConverter implements Converter<LocalDate> {
 
     @Override
-    public Class supportJavaTypeKey() {
+    public Class<LocalDate> supportJavaTypeKey() {
         return LocalDate.class;
     }
 
@@ -30,14 +30,14 @@ public class LocalDateConverter implements Converter<LocalDate> {
     }
 
     @Override
-    public LocalDate convertToJavaData(CellData cellData, ExcelContentProperty excelContentProperty, GlobalConfiguration globalConfiguration) throws Exception {
-        LocalDate localDate = LocalDate.of(1900,1,1);
-        return localDate.plusDays(cellData.getNumberValue().intValue()-2);
+    public LocalDate convertToJavaData(CellData cellData, ExcelContentProperty excelContentProperty, GlobalConfiguration globalConfiguration) {
+        LocalDate localDate = LocalDate.of(1900, 1, 1);
+        return localDate.plusDays(cellData.getNumberValue().intValue() - 2);
     }
 
     @Override
-    public CellData convertToExcelData(LocalDate localDate, ExcelContentProperty excelContentProperty, GlobalConfiguration globalConfiguration) throws Exception {
-        return new CellData(localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+    public CellData<String> convertToExcelData(LocalDate localDate, ExcelContentProperty excelContentProperty, GlobalConfiguration globalConfiguration) {
+        return new CellData<>(DateUtils.dateString(localDate));
     }
 }
 

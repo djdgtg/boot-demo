@@ -1,19 +1,15 @@
 package com.spring.boot.demo.aspect;
 
-import com.google.common.collect.ImmutableList;
 import com.spring.boot.demo.enums.Limit;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -29,13 +25,14 @@ import java.util.List;
  */
 @Component
 @Aspect
+@Slf4j
 public class LimitingAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(LimitingAspect.class);
 
-    private final RedisTemplate<String,Object> limitRedisTemplate;
+    private final RedisTemplate<String, Object> limitRedisTemplate;
 
-    public LimitingAspect(RedisTemplate<String,Object> limitRedisTemplate) {
+    public LimitingAspect(RedisTemplate<String, Object> limitRedisTemplate) {
         this.limitRedisTemplate = limitRedisTemplate;
     }
 
@@ -45,7 +42,7 @@ public class LimitingAspect {
         String key = getIpAddress();
         int limitPeriod = limit.period();
         int limitCount = limit.count();
-        List<String> keys = Arrays.asList(limit.prefix(),key);
+        List<String> keys = Arrays.asList(limit.prefix(), key);
         String luaScript = buildLuaScript();
         RedisScript<Long> redisScript = new DefaultRedisScript<>(luaScript, Long.class);
         Long count = limitRedisTemplate.execute(redisScript, keys, limitCount, limitPeriod);

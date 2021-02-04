@@ -19,33 +19,33 @@ public class ControllerAdviceHandler {
     private final static Logger log = LoggerFactory.getLogger(ControllerAdviceHandler.class);
 
     @ExceptionHandler(value = RuntimeException.class)
-    public Result handle(RuntimeException e) {
+    public Result<Object> handle(RuntimeException e) {
         log.error(e.getMessage(), e);
-        return Result.build(400,e.getMessage());
+        return Result.build(400, e.getMessage());
     }
 
     @ExceptionHandler(value = Exception.class)
-    public Result handle(Exception e) {
+    public Result<Object> handle(Exception e) {
         log.error(e.getMessage(), e);
-        return Result.build(400,e.getMessage());
+        return Result.build(400, e.getMessage());
     }
 
     @ExceptionHandler(value = StatusException.class)
-    public Result handle(StatusException e) {
+    public Result<Object> handle(StatusException e) {
         log.error(e.getMessage(), e);
-        return Result.build(400,e.getMessage());
+        return Result.build(400, e.getMessage());
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public Result handle(MethodArgumentNotValidException e) {
+    public Result<Object> handle(MethodArgumentNotValidException e) {
         log.error(e.getMessage(), e);
-        if(e.getBindingResult().hasErrors()){
+        if (e.getBindingResult().hasErrors()) {
             ObjectError objectError = e.getBindingResult().getAllErrors().get(0);
-            if(objectError!=null){
-                return Result.build(400,objectError.getDefaultMessage());
+            if (objectError != null) {
+                return Result.build(400, objectError.getDefaultMessage());
             }
         }
-        return Result.build(400,e.getMessage());
+        return Result.build(400, e.getMessage());
     }
 
 }

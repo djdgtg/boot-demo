@@ -2,9 +2,11 @@ package com.spring.boot.demo.shiro;
 
 import com.spring.boot.demo.service.ShiroService;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -34,18 +36,25 @@ public class ShiroConfig {
 
     /**
      * Description 权限管理，配置主要是Realm的管理认证
-     *
      **/
     @Bean
-    public SecurityManager securityManager(CustomRealm customRealm) {
+    public SecurityManager securityManager(CustomRealm customRealm, SessionManager sessionManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(customRealm);
+        securityManager.setSessionManager(sessionManager);
         return securityManager;
+    }
+
+    @Bean
+    public SessionManager sessionManager() {
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        //去除登陆页面后面带jsessionid
+        sessionManager.setSessionIdUrlRewritingEnabled(false);
+        return sessionManager;
     }
 
     /**
      * Description Filter工厂，设置对应的过滤条件和跳转条件
-     *
      **/
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
@@ -61,7 +70,6 @@ public class ShiroConfig {
 
     /**
      * Description 开启shiro注解功能
-     *
      **/
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {

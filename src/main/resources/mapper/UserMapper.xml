@@ -2,6 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.boot.demo.mapper.UserMapper">
 
+    <insert id="saveBatch">
+        insert into t_user(user_name,login_name,create_time,birthday,age) VALUES
+        <foreach collection="list" item="user" separator=",">
+            (#{user.userName},#{user.userName},#{user.createTime},#{user.birthday},#{user.age})
+        </foreach>
+    </insert>
+
 
     <select id="getUserRoles" resultType="java.lang.String">
         SELECT

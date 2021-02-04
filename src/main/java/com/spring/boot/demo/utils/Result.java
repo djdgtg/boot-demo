@@ -1,5 +1,8 @@
 package com.spring.boot.demo.utils;
 
+import com.spring.boot.demo.config.Constants;
+
+import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 
 
@@ -18,24 +21,12 @@ public class Result<T> implements Serializable {
 
     private T data;
 
-    public static <T> Result build(Integer status, String msg, T data) {
-        return new Result(status, msg, data);
-    }
-
-    public static <T> Result ok(T data) {
-        return new Result(data);
-    }
-
-    public static <T> Result ok() {
-        return new Result(null);
-    }
-
     public Result() {
 
     }
 
-    public static <T> Result build(Integer status, String msg) {
-        return new Result<T>(status, msg, null);
+    public static <T> Result<T> build(Integer status, String msg) {
+        return new Result<>(status, msg, null);
     }
 
     public Result(Integer status, String msg, T data) {
@@ -45,11 +36,10 @@ public class Result<T> implements Serializable {
     }
 
     public Result(T data) {
-        this.status = 200;
-        this.msg = "操作成功！";
+        this.status = HttpServletResponse.SC_OK;
+        this.msg = Constants.RESULT_SUCCESS_MSG;
         this.data = data;
     }
-
 
     public Integer getStatus() {
         return status;
@@ -75,5 +65,16 @@ public class Result<T> implements Serializable {
         this.data = data;
     }
 
+    public static <T> Result<T> ok() {
+        return new Result<>(null);
+    }
+
+    public static <T> Result<T> ok(T data) {
+        return new Result<>(data);
+    }
+
+    public static <T> Result<T> build(Integer status, String msg, T data) {
+        return new Result<>(status, msg, data);
+    }
 
 }

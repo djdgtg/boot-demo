@@ -9,13 +9,17 @@ import com.spring.boot.demo.converter.LocalDateTimeConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,44 +37,99 @@ public class ExcelUtils {
     @Autowired
     private LocalDateConverter localDateConverter;
 
-    public <T> List<T> getList(MultipartFile file,Class<T> clazz){
-        List<T> list=new ArrayList<>();
+    /**
+     * Description 根据导入的file获取对象集合
+     *
+     * @param file  file
+     * @param clazz class
+     * @return java.util.List<T>
+     * @author qinchao
+     * @date 2021/2/3 17:28
+     */
+    public <T> List<T> getList(MultipartFile file, Class<T> clazz) {
+        List<T> list = new ArrayList<>();
         try {
-            EasyExcel.read(file.getInputStream(),clazz, new AnalysisEventListener<T>(){
+            EasyExcel.read(file.getInputStream(), clazz, new AnalysisEventListener<T>() {
                 @Override
                 public void invoke(T object, AnalysisContext analysisContext) {
                     list.add(object);
                 }
+
                 @Override
                 public void doAfterAllAnalysed(AnalysisContext analysisContext) {
 
                 }
             }).registerConverter(localDateTimeConverter).registerConverter(localDateConverter).sheet(0).doRead();
         } catch (IOException e) {
-            log.error("Excel cellData convert to Object occur IOException",e);
+            log.error("Excel cellData convert to Object occur IOException", e);
         }
         return list;
     }
 
-    public <T> void export(List<T> list, HttpServletResponse response,String fileName){
-        if(!CollectionUtils.isEmpty(list)){
-            try {
-                fileName = URLEncoder.encode(fileName, "UTF-8");
-                fileName = getFileName(fileName);
-                response.setContentType("application/vnd.ms-excel");
-                response.setCharacterEncoding("utf8");
-                response.setHeader("Content-Disposition", "attachment; filename=" + fileName + ".xlsx");
-                ServletOutputStream outputStream = response.getOutputStream();
+    /**
+     * Description excel导出
+     *
+     * @param list     对象集合
+     * @param response response
+     * @param fileName 文件名称
+     * @param header   excel表头
+     * @return void
+     * @author qinchao
+     * @date 2021/2/3 17:25
+     */
+    public <T> void export(List<T> list, HttpServletResponse response, String fileName, Class<T> header) {
+        try {
+            fileName = getFileName(fileName);
+            response.setContentType("application/vnd.ms-excel;charset=utf-8");
+            response.setHeader("Content-Disposition", "attachment; filename=" + fileName + ".xlsx");
+            ServletOutputStream outputStream = response.getOutputStream();
 
-                EasyExcel.write(outputStream).registerConverter(localDateTimeConverter)
-                        .registerConverter(localDateConverter).excelType(ExcelTypeEnum.XLSX).sheet("sheet").doWrite(list);
-            } catch (IOException e) {
-                log.error("Excel export occur IOException",e);
-            }
+            EasyExcel.write(outputStream).head(header).registerConverter(localDateTimeConverter)
+                    .registerConverter(localDateConverter).excelType(ExcelTypeEnum.XLSX).sheet("sheet").doWrite(list);
+        } catch (IOException e) {
+            log.error("Excel export occur IOException", e);
         }
     }
 
-    private static String getFileName(String fileName) {
+    /**
+     * Description
+     *
+     * @param list     对象集合
+     * @param filePath 生成的文件路径
+     * @param header   excel表头
+     * @return void
+     * @author qinchao
+     * @date 2021/2/3 17:24
+     */
+    public <T> void makeFile(List<T> list, String filePath, Class<T> header) {
+        EasyExcel.write(filePath).head(header).registerConverter(localDateTimeConverter)
+                .registerConverter(localDateConverter).excelType(ExcelTypeEnum.XLSX).sheet("sheet").doWrite(list);
+    }
+
+
+    /**
+     * Description 获取文件名称，避免浏览器下载出现中文名称乱码
+     *
+     * @param fileName
+     * @return java.lang.String
+     * @author qinchao
+     * @date 2021/2/3 17:26
+     */
+    private String getFileName(String fileName) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        try {
+            fileName = new String(fileName.getBytes(), StandardCharsets.UTF_8);
+            String agent = (request.getHeader("USER-AGENT"));
+            if (agent.contains("MSIE") || agent.contains("Trident")) {
+                //IE浏览器处理
+                fileName = URLEncoder.encode(fileName, "UTF-8");
+            } else {
+                // 非IE浏览器的处理：
+                fileName = new String(fileName.getBytes(), StandardCharsets.ISO_8859_1);
+            }
+        } catch (UnsupportedEncodingException e) {
+            log.error("encode chinese error , now set En name", e);
+        }
         return fileName;
     }
 

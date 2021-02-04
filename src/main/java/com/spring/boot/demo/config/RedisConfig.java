@@ -29,7 +29,7 @@ public class RedisConfig {
     public CacheManager cacheManager(RedisConnectionFactory factory) {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 //缓存过期时间，2天
-                .entryTtl(Duration.ofSeconds(3600 * 24 * 2))
+                .entryTtl(Duration.ofSeconds(Constants.CACHE_REDIS_DURATION))
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(getValueSerializer()))
                 .disableCachingNullValues();

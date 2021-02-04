@@ -1,5 +1,7 @@
 package com.spring.boot.demo.utils;
 
+import com.spring.boot.demo.config.Constants;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,12 +14,9 @@ import java.time.format.DateTimeFormatter;
  */
 public class DateUtils {
 
-    private static String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
-
-    private static String DATE_PATTERN = "yyyy-MM-dd";
 
     public static String dateString(LocalDate date) {
-        return date.format(DateTimeFormatter.ofPattern(DATE_PATTERN));
+        return date.format(DateTimeFormatter.ofPattern(Constants.DATE_PATTERN));
     }
 
     public static String dateString(LocalDate date, String pattern) {
@@ -25,7 +24,7 @@ public class DateUtils {
     }
 
     public static String datetimeString(LocalDateTime datetime) {
-        return datetime.format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
+        return datetime.format(DateTimeFormatter.ofPattern(Constants.DATE_TIME_PATTERN));
     }
 
     public static String datetimeString(LocalDateTime datetime, String pattern) {
@@ -37,7 +36,7 @@ public class DateUtils {
     }
 
     public static LocalDateTime datetime(String datetime) {
-        return LocalDateTime.parse(datetime, DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
+        return LocalDateTime.parse(datetime, DateTimeFormatter.ofPattern(Constants.DATE_TIME_PATTERN));
     }
 
     public static LocalDate date(String date, String pattern) {
@@ -45,7 +44,7 @@ public class DateUtils {
     }
 
     public static LocalDate date(String date) {
-        return LocalDate.parse(date, DateTimeFormatter.ofPattern(DATE_PATTERN));
+        return LocalDate.parse(date, DateTimeFormatter.ofPattern(Constants.DATE_PATTERN));
     }
 
 }

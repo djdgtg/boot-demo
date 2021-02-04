@@ -12,7 +12,6 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 /**
  * description 自定义realm,进行认证和授权
@@ -31,13 +30,13 @@ public class CustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        if (StringUtils.isEmpty(authenticationToken.getPrincipal())) {
+        if (authenticationToken.getPrincipal() == null) {
             return null;
         }
         //获取用户信息
         String username = (String) authenticationToken.getPrincipal();
         String password = new String((char[]) authenticationToken.getCredentials());
-        User user = shiroService.auth(username,password);
+        User user = shiroService.auth(username, password);
         return new SimpleAuthenticationInfo(user, user.getPassword(), getName());
     }
 
@@ -47,8 +46,8 @@ public class CustomRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         //获取登录用户
-        User user  = (User) principalCollection.getPrimaryPrincipal();
-        if(user!=null){
+        User user = (User) principalCollection.getPrimaryPrincipal();
+        if (user != null) {
             SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
             //添加角色
             simpleAuthorizationInfo.addRoles(shiroService.getUserRoles(user.getId()));

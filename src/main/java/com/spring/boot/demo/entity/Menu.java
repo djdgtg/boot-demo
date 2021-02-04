@@ -7,7 +7,8 @@ import java.io.Serializable;
 
 /**
  * t_menu
- * @author 
+ *
+ * @author
  */
 @Data
 @TableName("t_menu")

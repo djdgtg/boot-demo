@@ -17,14 +17,14 @@ import java.util.concurrent.Executor;
 public class ThreadPoolExecutorConfig {
 
     @Bean("myExecutor")
-    public Executor taskExecutor(){
+    public Executor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         // 设置核心线程数
         executor.setCorePoolSize(5);
         // 设置最大线程数
         executor.setMaxPoolSize(20);
         //配置队列大小
-        executor.setQueueCapacity(Integer.MAX_VALUE);
+        executor.setQueueCapacity(100);
         // 设置线程活跃时间（秒）
         executor.setKeepAliveSeconds(60);
         // 设置默认线程名称
