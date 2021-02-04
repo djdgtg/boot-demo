@@ -47,7 +47,7 @@ public class LogAspect {
         Object[] args = joinPoint.getArgs();
 
         // 构造参数组集合
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>(16);
         for (int i = 0; i < parameterNames.length; i++) {
             Object value = args[i];
             if (args[i] instanceof HttpServletRequest) {
