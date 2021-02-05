@@ -27,34 +27,34 @@ public class WebSocketListener {
     /**
      * 记录当前在线连接数
      */
-    private static AtomicInteger onlineCount = new AtomicInteger(0);
+    private final static AtomicInteger ONLINE_COUNT = new AtomicInteger(0);
 
     /**
      * 存放所有在线的客户端:在分布式环境下，可以配合redisson使用
+     * 很遗憾，session没有实现序列化，无法直接放在redis中
      */
-    private static Map<String, Session> clients = new ConcurrentHashMap<>();
+    private final static Map<String, Session> CLIENTS = new ConcurrentHashMap<>();
 
     /**
      * 连接建立成功调用的方法
      */
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username) {
-        if (!clients.containsKey(username)) {
-            clients.put(username, session);
-            log.info("有新连接加入：{}，当前在线人数为：{}", session.getId(), onlineCount.get());
-        }
+        // 在线数减1
+        int count = ONLINE_COUNT.incrementAndGet();
+        CLIENTS.put(username, session);
+        log.info("有新连接[{}]加入，当前在线人数为：{}", session.getId(), count);
     }
 
     /**
      * 连接关闭调用的方法
      */
     @OnClose
-    public void onClose(Session session, @PathParam("username") String username) {
-        if (clients.containsKey(username)) {
-            onlineCount.decrementAndGet(); // 在线数减1
-            clients.remove(session.getId());
-            log.info("有一连接关闭：{}，当前在线人数为：{}", session.getId(), onlineCount.get());
-        }
+    public void onClose(Session session) {
+        // 在线数减1
+        int count = ONLINE_COUNT.decrementAndGet();
+        CLIENTS.remove(session.getId());
+        log.info("有连接[{}]关闭，当前在线人数为：{}", session.getId(), count);
     }
 
     /**
@@ -70,8 +70,7 @@ public class WebSocketListener {
 
     @OnError
     public void onError(Session session, Throwable error) {
-        log.error("发生错误:{}", session.getId());
-        error.printStackTrace();
+        log.error("连接[{}]发生错误:", session.getId(), error);
     }
 
     /**
@@ -80,7 +79,7 @@ public class WebSocketListener {
      * @param message 消息内容
      */
     private static void sendMessage(String message, Session session) {
-        for (Map.Entry<String, Session> sessionEntry : clients.entrySet()) {
+        for (Map.Entry<String, Session> sessionEntry : CLIENTS.entrySet()) {
             Session toSession = sessionEntry.getValue();
             // 排除掉自己
             if (!session.getId().equals(toSession.getId()) && toSession.isOpen()) {
