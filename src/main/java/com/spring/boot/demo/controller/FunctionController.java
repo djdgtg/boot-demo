@@ -1,6 +1,5 @@
 package com.spring.boot.demo.controller;
 
-import com.spring.boot.demo.config.Constants;
 import com.spring.boot.demo.exception.StatusException;
 import com.spring.boot.demo.service.ShiroService;
 import com.spring.boot.demo.utils.MinioUtils;
