@@ -29,10 +29,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 服务控制器
+ * description UserController
  *
  * @author qinchao
- * @description 由 Mybatisplus Code Generator 创建
  * @since 2020-12-01 14:45:28
  */
 @Slf4j

@@ -19,7 +19,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * description
+ * description MinioUtils
  *
  * @author qinchao
  * @date 2020/12/2 18:06

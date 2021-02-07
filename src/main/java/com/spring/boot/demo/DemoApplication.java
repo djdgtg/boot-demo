@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 
 /**
- * description
+ * description 启动类
  *
  * @author qinchao
  * @date 2021/2/2 14:24

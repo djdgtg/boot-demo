@@ -5,6 +5,7 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,12 +13,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * description
+ * description User
  *
  * @author qinchao
- * @date 2021/2/2 14:34
+ * @date 2020/12/2 11:33
  */
 @Data
+@Builder
 @TableName("t_user")
 public class User implements Serializable {
 

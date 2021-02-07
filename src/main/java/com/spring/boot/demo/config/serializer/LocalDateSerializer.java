@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 /**
- * description
+ * description LocalDateSerializer
  *
  * @author qinchao
  * @date 2021/2/4 17:48

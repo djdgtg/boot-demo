@@ -7,8 +7,9 @@ import java.io.Serializable;
 
 
 /**
+ * description Result
+ *
  * @author qinc
- * @description
  * @date 2018/12/11
  */
 public class Result<T> implements Serializable {

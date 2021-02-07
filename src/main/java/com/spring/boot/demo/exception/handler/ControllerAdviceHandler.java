@@ -2,38 +2,41 @@ package com.spring.boot.demo.exception.handler;
 
 import com.spring.boot.demo.exception.StatusException;
 import com.spring.boot.demo.utils.Result;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
+ * description 统一异常处理器
+ *
  * @author qinchao
- * @date 2020/12/8 14:41
+ * @date 2021/2/7 10:30
  */
 @RestControllerAdvice
+@Slf4j
 public class ControllerAdviceHandler {
 
-    private final static Logger log = LoggerFactory.getLogger(ControllerAdviceHandler.class);
 
     @ExceptionHandler(value = RuntimeException.class)
     public Result<Object> handle(RuntimeException e) {
         log.error(e.getMessage(), e);
-        return Result.build(400, e.getMessage());
+        return Result.build(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler(value = Exception.class)
     public Result<Object> handle(Exception e) {
         log.error(e.getMessage(), e);
-        return Result.build(400, e.getMessage());
+        return Result.build(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler(value = StatusException.class)
     public Result<Object> handle(StatusException e) {
         log.error(e.getMessage(), e);
-        return Result.build(400, e.getMessage());
+        return Result.build(e.getCode(), e.getMsg());
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
@@ -42,10 +45,10 @@ public class ControllerAdviceHandler {
         if (e.getBindingResult().hasErrors()) {
             ObjectError objectError = e.getBindingResult().getAllErrors().get(0);
             if (objectError != null) {
-                return Result.build(400, objectError.getDefaultMessage());
+                return Result.build(HttpServletResponse.SC_BAD_REQUEST, objectError.getDefaultMessage());
             }
         }
-        return Result.build(400, e.getMessage());
+        return Result.build(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
     }
 
 }

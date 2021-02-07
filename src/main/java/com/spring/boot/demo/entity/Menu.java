@@ -6,9 +6,10 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * t_menu
+ * description Menu
  *
- * @author
+ * @author qinchao
+ * @date 2020/12/2 11:33
  */
 @Data
 @TableName("t_menu")

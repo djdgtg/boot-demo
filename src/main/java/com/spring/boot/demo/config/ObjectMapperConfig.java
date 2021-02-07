@@ -16,8 +16,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
+ * description ObjectMapperConfig
+ *
  * @author qinchao
- * @description
  * @date 2020/12/3 10:54
  */
 @Configuration

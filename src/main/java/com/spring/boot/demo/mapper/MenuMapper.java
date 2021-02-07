@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.spring.boot.demo.entity.Menu;
 
 /**
- * description 
+ * description MenuMapper
  * 
  * @author qinchao 
  * @date 2021/2/3 9:45

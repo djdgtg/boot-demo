@@ -1,11 +1,5 @@
 package com.spring.boot.demo.converter;
 
-/**
- * @author qinchao
- * @description
- * @date 2020/12/2 11:33
- */
-
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.enums.CellDataTypeEnum;
 import com.alibaba.excel.metadata.CellData;
@@ -16,6 +10,12 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
+/**
+ * description LocalDateConverter
+ *
+ * @author qinchao
+ * @date 2020/12/2 11:33
+ */
 @Component
 public class LocalDateConverter implements Converter<LocalDate> {
 

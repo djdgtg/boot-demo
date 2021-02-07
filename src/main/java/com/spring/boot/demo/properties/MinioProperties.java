@@ -3,7 +3,7 @@ package com.spring.boot.demo.properties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * description
+ * description MinioProperties
  *
  * @author qinchao
  * @date 2020/12/2 18:06

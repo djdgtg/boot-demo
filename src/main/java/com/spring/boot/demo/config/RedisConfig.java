@@ -17,8 +17,9 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import java.time.Duration;
 
 /**
+ * description RedisConfig
+ *
  * @author qinchao
- * description 是
  * @date 2020/12/3 10:24
  */
 @Configuration

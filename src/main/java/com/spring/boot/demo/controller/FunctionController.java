@@ -1,5 +1,7 @@
 package com.spring.boot.demo.controller;
 
+import com.spring.boot.demo.config.Constants;
+import com.spring.boot.demo.exception.StatusException;
 import com.spring.boot.demo.service.ShiroService;
 import com.spring.boot.demo.utils.MinioUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +27,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * description FunctionController
+ *
  * @author qinchao
- * @description
  * @date 2020/11/20 11:30
  */
 @RestController
@@ -112,11 +115,14 @@ public class FunctionController {
     @RequiresRoles("admin")
     public String perms() {
         Map<String, String> map = shiroService.loadShiroFilter();
-        AbstractShiroFilter shiroFilter = null;
+        AbstractShiroFilter shiroFilter;
         try {
             shiroFilter = (AbstractShiroFilter) shiroFilterFactoryBean.getObject();
         } catch (Exception e) {
-            throw new RuntimeException("get ShiroFilter from shiroFilterFactoryBean error!");
+            throw new StatusException(HttpServletResponse.SC_BAD_REQUEST, "Get shiroFilter from shiroFilterFactoryBean error!");
+        }
+        if (shiroFilter == null) {
+            throw new StatusException(HttpServletResponse.SC_BAD_REQUEST, "ShiroFilter is null!");
         }
         PathMatchingFilterChainResolver filterChainResolver = (PathMatchingFilterChainResolver) shiroFilter
                 .getFilterChainResolver();
@@ -127,7 +133,7 @@ public class FunctionController {
         shiroFilterFactoryBean.getFilterChainDefinitionMap().clear();
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
         map.forEach(manager::createChain);
-        return "update perms success";
+        return "Update permissions success";
     }
 
 }

@@ -6,6 +6,7 @@ import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.spring.boot.demo.converter.LocalDateConverter;
 import com.spring.boot.demo.converter.LocalDateTimeConverter;
+import com.spring.boot.demo.exception.StatusException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,8 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * description ExcelUtils
+ *
  * @author qinchao
- * @description
  * @date 2020/11/30 16:33
  */
 @Component
@@ -87,7 +89,7 @@ public class ExcelUtils {
             EasyExcel.write(outputStream).head(header).registerConverter(localDateTimeConverter)
                     .registerConverter(localDateConverter).excelType(ExcelTypeEnum.XLSX).sheet("sheet").doWrite(list);
         } catch (IOException e) {
-            log.error("Excel export occur IOException", e);
+            throw new StatusException(HttpServletResponse.SC_BAD_REQUEST, "Excel export occur IOException!");
         }
     }
 
@@ -117,9 +119,9 @@ public class ExcelUtils {
      */
     private String getFileName(String fileName) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String agent = (request.getHeader("USER-AGENT"));
         try {
             fileName = new String(fileName.getBytes(), StandardCharsets.UTF_8);
-            String agent = (request.getHeader("USER-AGENT"));
             if (agent.contains("MSIE") || agent.contains("Trident")) {
                 //IE浏览器处理
                 fileName = URLEncoder.encode(fileName, "UTF-8");
@@ -128,7 +130,7 @@ public class ExcelUtils {
                 fileName = new String(fileName.getBytes(), StandardCharsets.ISO_8859_1);
             }
         } catch (UnsupportedEncodingException e) {
-            log.error("encode chinese error , now set En name", e);
+            throw new StatusException(HttpServletResponse.SC_BAD_REQUEST, "FileName encode error!");
         }
         return fileName;
     }

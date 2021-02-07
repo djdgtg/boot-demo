@@ -2,61 +2,56 @@ package com.spring.boot.demo.exception;
 
 
 /**
- * 状态异常类<br>
+ * description 自定义状态异常类
  *
- * @author WANG
+ * @author qinchao
+ * @date 2021/2/7 10:30
  */
 public class StatusException extends RuntimeException {
     private static final long serialVersionUID = 5003047488500388819L;
 
     /**
-     * 追踪ID
-     */
-    private String traceId;
-
-    /**
      * 状态码
      */
-    private String code;
+    private Integer code;
 
     /**
      * 状态描述
      */
-    private String desc;
+    private String msg;
 
     /**
      * 构造函数
      */
-    public StatusException(String code, String desc) {
-        super("[code: " + code + "; desc: " + desc + "]");
+    public StatusException(Integer code, String msg) {
+        super("[code: " + code + "; msg: " + msg + "]");
         this.code = code;
-        this.desc = desc;
+        this.msg = msg;
     }
 
     /**
      * 构造函数
      */
-    public StatusException(String code, String desc, Throwable cause) {
-        super("[code: " + code + "; desc: " + desc + "]", cause);
+    public StatusException(Integer code, String msg, Throwable cause) {
+        super("[code: " + code + "; msg: " + msg + "]", cause);
         this.code = code;
-        this.desc = desc;
+        this.msg = msg;
     }
 
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public String getDesc() {
-        return desc;
+    public void setCode(Integer code) {
+        this.code = code;
     }
 
-    public String getTraceId() {
-        return traceId;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setTraceId(String traceId) {
-        this.traceId = traceId;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
-
 
 }

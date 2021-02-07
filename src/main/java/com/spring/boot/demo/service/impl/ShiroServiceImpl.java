@@ -37,7 +37,7 @@ public class ShiroServiceImpl implements ShiroService {
         //登出
         map.put("/logout", "logout");
         //登陆及静态资源放行
-        map.put("/user/checkLogin", "anon");
+        map.put("/user/login", "anon");
         map.put("/css/**", "anon");
         map.put("/fonts/**", "anon");
         map.put("/img/**", "anon");
