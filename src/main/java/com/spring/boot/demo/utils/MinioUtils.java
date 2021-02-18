@@ -27,8 +27,11 @@ import java.io.OutputStream;
 @Component
 public class MinioUtils {
 
-    @Autowired
-    private MinioClient client;
+    private final MinioClient client;
+
+    public MinioUtils(MinioClient client) {
+        this.client = client;
+    }
 
     /**
      * 创建桶

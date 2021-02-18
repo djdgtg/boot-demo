@@ -62,7 +62,7 @@ public class UserController {
      * 1.登陆做了限流，10秒内50次。AOP+Redis+Lua实现
      * 2.登陆失败次数限制，1小时5次。
      **/
-    @GetMapping(value = "checkLogin")
+    @GetMapping(value = "login")
     @Limit(period = 10, count = 50)
     public Result<Object> login(String username, String password) {
         ValueOperations<String, Object> operations = redisTemplate.opsForValue();
@@ -87,8 +87,8 @@ public class UserController {
     }
 
     @GetMapping("{id}")
-    public User getById(@PathVariable Long id) {
-        return userService.getById(id);
+    public Result<User> getById(@PathVariable Long id) {
+        return Result.ok(userService.getById(id));
     }
 
     @PostMapping("page")

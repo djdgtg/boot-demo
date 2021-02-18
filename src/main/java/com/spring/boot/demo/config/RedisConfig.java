@@ -1,6 +1,7 @@
 package com.spring.boot.demo.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.redisson.spring.cache.RedissonSpringCacheManager;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
@@ -34,7 +35,6 @@ public class RedisConfig {
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(keySerializer))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(valueSerializer))
                 .disableCachingNullValues();
-
         return RedisCacheManager.builder(factory).cacheDefaults(config).transactionAware().build();
     }
 

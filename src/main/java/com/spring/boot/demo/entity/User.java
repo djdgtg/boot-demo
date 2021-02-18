@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
  * @date 2020/12/2 11:33
  */
 @Data
-@Builder
 @TableName("t_user")
 public class User implements Serializable {
 

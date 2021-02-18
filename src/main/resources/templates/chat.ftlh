@@ -125,7 +125,7 @@
 											</ul>
 										</div>
 									</div>
-									<h3 class="panel-title">Chat</h3>
+									<h3 class="panel-title" id="count">Chatroom</h3>
 								</div>
 					
 								<!--Widget body-->
@@ -172,7 +172,6 @@
 									<div class="row">
 										<div class="col-xs-12">
 											<input type="hidden" id="username" name="username" value="${user.userName}">
-											<#--<input type="text" id="content" placeholder="Enter your text" class="form-control">-->
 											<div class="panel">
 												<div class="panel-body">
 													<!--Summernote-->

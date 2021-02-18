@@ -17,8 +17,11 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(MinioProperties.class)
 public class MinioConfig {
 
-    @Autowired
-    private MinioProperties minioProperties;
+    private final MinioProperties minioProperties;
+
+    public MinioConfig(MinioProperties minioProperties) {
+        this.minioProperties = minioProperties;
+    }
 
     /**
      * 获取MinioClient

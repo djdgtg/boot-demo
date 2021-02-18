@@ -34,10 +34,14 @@ import java.util.List;
 @Slf4j
 public class ExcelUtils {
 
-    @Autowired
-    private LocalDateTimeConverter localDateTimeConverter;
-    @Autowired
-    private LocalDateConverter localDateConverter;
+    private final LocalDateTimeConverter localDateTimeConverter;
+
+    private final LocalDateConverter localDateConverter;
+
+    public ExcelUtils(LocalDateConverter localDateConverter, LocalDateTimeConverter localDateTimeConverter) {
+        this.localDateConverter = localDateConverter;
+        this.localDateTimeConverter = localDateTimeConverter;
+    }
 
     /**
      * Description 根据导入的file获取对象集合

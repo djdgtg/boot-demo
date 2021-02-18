@@ -28,8 +28,6 @@ import java.util.List;
 @Slf4j
 public class LimitingAspect {
 
-    private static final Logger logger = LoggerFactory.getLogger(LimitingAspect.class);
-
     private final RedisTemplate<String, Object> limitRedisTemplate;
 
     public LimitingAspect(RedisTemplate<String, Object> limitRedisTemplate) {
@@ -46,7 +44,7 @@ public class LimitingAspect {
         String luaScript = buildLuaScript();
         RedisScript<Long> redisScript = new DefaultRedisScript<>(luaScript, Long.class);
         Long count = limitRedisTemplate.execute(redisScript, keys, limitCount, limitPeriod);
-        logger.info("Access try count is {} for name = {} and key = {}", count, name, key);
+        log.info("Access try count is {} for name = {} and key = {}", count, name, key);
         if (count == null || count > limitCount) {
             throw new RuntimeException("The current request is restricted, please try again later");
         }

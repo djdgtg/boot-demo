@@ -192,7 +192,7 @@
 
 		function login() {
 			$.ajax({
-				url: 'user/checkLogin',
+				url: 'user/login',
 				method: 'get',
 				data: $('#loginForm').serialize(),
 				success: function (result) {

@@ -22,8 +22,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomRealm extends AuthorizingRealm {
 
-    @Autowired
-    private ShiroService shiroService;
+    private final ShiroService shiroService;
+
+    public CustomRealm(ShiroService shiroService) {
+        this.shiroService = shiroService;
+    }
 
     /**
      * Description 认证
