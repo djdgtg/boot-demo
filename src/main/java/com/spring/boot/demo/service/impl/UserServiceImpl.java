@@ -66,4 +66,9 @@ public class UserServiceImpl implements UserService {
         wrapper.eq(User::getUserName, username).eq(User::getPassword, password);
         return userMapper.selectOne(wrapper);
     }
+
+    @Override
+    public User getUserByUsername(String username) {
+        return null;
+    }
 }

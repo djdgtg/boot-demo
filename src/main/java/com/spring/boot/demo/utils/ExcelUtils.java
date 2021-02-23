@@ -9,6 +9,8 @@ import com.spring.boot.demo.converter.LocalDateTimeConverter;
 import com.spring.boot.demo.exception.StatusException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -23,6 +25,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * description ExcelUtils
@@ -122,7 +125,7 @@ public class ExcelUtils {
      * @date 2021/2/3 17:26
      */
     private String getFileName(String fileName) {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         String agent = (request.getHeader("USER-AGENT"));
         try {
             fileName = new String(fileName.getBytes(), StandardCharsets.UTF_8);

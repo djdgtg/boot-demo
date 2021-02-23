@@ -55,4 +55,6 @@ public interface UserService {
      * @date 2021/2/3 18:00
      */
     User login(String username, String password);
+
+    User getUserByUsername(String username);
 }

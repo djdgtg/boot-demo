@@ -18,6 +18,7 @@ spring:
 mybatis-plus:
   mapper-locations: classpath*:/mapper/*Mapper.xml
 
+
 # MinIo文件服务器
 minio:
   endpoint: http://localhost:9000
