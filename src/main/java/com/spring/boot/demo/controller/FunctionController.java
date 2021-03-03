@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -82,9 +81,9 @@ public class FunctionController {
         RAtomicLong atomicLong = redissonClient.getAtomicLong("ticket_count");
         long count = 10 - atomicLong.getAndIncrement();
         if (count > 0) {
-            log.info("成功，剩余：" + count);
+            log.info("success, remain: " + count);
         } else {
-            log.info("失败，剩余：0");
+            log.info("fail, remain: 0");
         }
     }
 

@@ -3,6 +3,7 @@ package com.spring.boot.demo.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.spring.boot.demo.controller.vo.PageVO;
+import com.spring.boot.demo.controller.vo.UserVO;
 import com.spring.boot.demo.entity.User;
 
 import java.util.List;
@@ -57,4 +58,6 @@ public interface UserService {
     User login(String username, String password);
 
     User getUserByUsername(String username);
+
+    IPage<UserVO> rolePage(PageVO<UserVO> pageVO);
 }

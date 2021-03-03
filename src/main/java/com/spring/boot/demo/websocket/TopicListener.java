@@ -30,6 +30,8 @@ public class TopicListener implements ApplicationRunner {
 
     private final ObjectMapper objectMapper;
 
+    private final static String WS_CHAT_TOPIC_NAME = "topic_ws_chat";
+
     public TopicListener(RedissonClient redissonClient, ObjectMapper objectMapper) {
         this.redissonClient = redissonClient;
         this.objectMapper = objectMapper;
@@ -37,26 +39,18 @@ public class TopicListener implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments applicationArguments) throws Exception {
-        //设置初始化
-        RAtomicLong atomicLong = redissonClient.getAtomicLong("ws_chat_count");
-        atomicLong.set(0);
-        RTopic wsChatMsg = redissonClient.getTopic("topic_ws_chat");
+        RTopic wsChatMsg = redissonClient.getTopic(WS_CHAT_TOPIC_NAME);
+        log.info("subscribed ws chat topic: {}", WS_CHAT_TOPIC_NAME);
         wsChatMsg.addListener(WebSocketMessage.class, (charSequence, message) -> {
-            Map<String, Session> sessions = WebSocketListener.SESSIONS;
-            if (sessions.size() == 0) {
-                atomicLong.set(0);
-            }
-            for (Session session : sessions.values()) {
-                boolean send = session.isOpen() && (message.getType() == 1
-                        || message.getType() == 0 && !session.getId().equals(message.getSenderId()));
-                if (send) {
+            WebSocketListener.SESSIONS.forEach((username, session) -> {
+                if (!session.getId().equals(message.getSenderId())) {
                     try {
                         session.getAsyncRemote().sendText(objectMapper.writeValueAsString(message));
                     } catch (JsonProcessingException e) {
-                        log.error("ws send count error", e);
+                        log.error("ws send message json parse exception", e);
                     }
                 }
-            }
+            });
         });
     }
 

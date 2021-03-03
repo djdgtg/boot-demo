@@ -11,7 +11,7 @@ spring:
     name: boot-demo
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/${spring.application.name}?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    url: jdbc:mysql://localhost:3306/boot-demo?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
     username: root
     password: root
 
@@ -31,3 +31,4 @@ logging:
   level:
     root: info
     com.spring.boot.demo.mapper: debug
+

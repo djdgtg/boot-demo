@@ -11,26 +11,62 @@
 
 
     <select id="getUserRoles" resultType="java.lang.String">
-        SELECT
-            DISTINCT r.role_name
-        FROM
-            t_user u
-                LEFT JOIN t_user_role ur ON ur.user_id = u.id
-                LEFT JOIN t_role r ON r.id = ur.role_id
-        WHERE
-            u.id = #{userId}
+        SELECT DISTINCT r.role_name
+        FROM t_user u
+                 LEFT JOIN t_user_role ur ON ur.user_id = u.id
+                 LEFT JOIN t_role r ON r.id = ur.role_id
+        WHERE u.id = #{userId}
     </select>
 
     <select id="getRolePermissions" resultType="java.lang.String">
+        SELECT DISTINCT p.permission_name
+        FROM t_user u
+                 LEFT JOIN t_user_role ur ON ur.user_id = u.id
+                 LEFT JOIN t_role r ON r.id = ur.role_id
+                 LEFT JOIN t_role_permission rp ON rp.role_id = r.id
+                 LEFT JOIN t_permission p ON p.id = rp.permission_id
+        WHERE u.id = #{userId}
+    </select>
+
+    <select id="rolePageByXml" resultType="com.spring.boot.demo.controller.vo.UserVO">
         SELECT
-            DISTINCT p.permission_name
+        u.id,
+        u.user_name userName,
+        u.login_name loginName,
+        u.password,
+        u.create_time createTime,
+        u.birthday,
+        u.age,
+        group_concat(r.role_name) roleName
         FROM
-            t_user u
-                LEFT JOIN t_user_role ur ON ur.user_id = u.id
-                LEFT JOIN t_role r ON r.id = ur.role_id
-                LEFT JOIN t_role_permission rp ON rp.role_id=r.id
-                LEFT JOIN t_permission p ON p.id=rp.permission_id
+        t_user u
+        LEFT JOIN t_user_role ur ON ur.user_id = u.id
+        LEFT JOIN t_role r ON r.id = ur.role_id
         WHERE
-            u.id = #{userId}
+        1 = 1
+        <if test="userVO.userName != null and userVO.userName !=''">
+            AND u.user_name = #{userVO.userName}
+        </if>
+        GROUP BY u.id
+        <if test="userVO.roleName != null and userVO.roleName !=''">
+            HAVING roleName like concat('%',#{userVO.roleName},'%')
+        </if>
+    </select>
+
+    <select id="rolePageByWrapper" resultType="com.spring.boot.demo.controller.vo.UserVO">
+        SELECT
+        u.id,
+        u.user_name userName,
+        u.login_name loginName,
+        u.password,
+        u.create_time createTime,
+        u.birthday,
+        u.age,
+        group_concat(r.role_name) roleName
+        FROM
+        t_user u
+        LEFT JOIN t_user_role ur ON ur.user_id = u.id
+        LEFT JOIN t_role r ON r.id = ur.role_id
+        ${ew.customSqlSegment}
     </select>
 </mapper>

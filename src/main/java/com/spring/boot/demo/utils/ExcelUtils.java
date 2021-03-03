@@ -92,7 +92,6 @@ public class ExcelUtils {
             response.setContentType("application/vnd.ms-excel;charset=utf-8");
             response.setHeader("Content-Disposition", "attachment; filename=" + fileName + ".xlsx");
             ServletOutputStream outputStream = response.getOutputStream();
-
             EasyExcel.write(outputStream).head(header).registerConverter(localDateTimeConverter)
                     .registerConverter(localDateConverter).excelType(ExcelTypeEnum.XLSX).sheet("sheet").doWrite(list);
         } catch (IOException e) {

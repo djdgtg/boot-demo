@@ -50,7 +50,7 @@ public class WebSocketListener {
         // 在线数加1
         long count = atomicLong.incrementAndGet();
         SESSIONS.put(username, session);
-        log.info("有新连接[{}]加入，当前在线人数为：{}", session.getId(), count);
+        log.info("A new connection [{}] joined, the current number of online users is {}", session.getId(), count);
         sendCount(count);
     }
 
@@ -63,7 +63,7 @@ public class WebSocketListener {
         // 在线数减1
         long count = atomicLong.decrementAndGet();
         SESSIONS.remove(username);
-        log.info("有连接[{}]关闭，当前在线人数为：{}", session.getId(), count);
+        log.info("A connection [{}] is closed, the current online number is: {}", session.getId(), count);
         sendCount(count);
     }
 
@@ -74,7 +74,7 @@ public class WebSocketListener {
      */
     @OnMessage
     public void onMessage(String message, Session session) throws JsonProcessingException {
-        log.info("服务端收到客户端[{}]的消息:{}", session.getId(), message);
+        log.info("The server receives a message [{}] from the client [{}]", message, session.getId());
         RTopic wsChat = redissonClient.getTopic("topic_ws_chat");
         WebSocketMessage socketMessage = objectMapper.readValue(message, WebSocketMessage.class);
         socketMessage.setSenderId(session.getId());
@@ -84,7 +84,7 @@ public class WebSocketListener {
 
     @OnError
     public void onError(Session session, Throwable error) {
-        log.error("连接[{}]发生错误:", session.getId(), error);
+        log.error("There was an error connecting to [{}]", session.getId(), error);
     }
 
     /**
@@ -98,7 +98,7 @@ public class WebSocketListener {
         SESSIONS.values().forEach(toSession -> {
             // 排除掉自己
             if (!session.getId().equals(toSession.getId()) && toSession.isOpen()) {
-                log.info("服务端给客户端[{}]发送消息:{}", toSession.getId(), message);
+                log.info("The server sends a message [{}] to the client [{}]",  message, toSession.getId());
                 toSession.getAsyncRemote().sendText(message);
             }
         });

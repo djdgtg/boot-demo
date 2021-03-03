@@ -2,12 +2,14 @@ package com.spring.boot.demo.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.spring.boot.demo.controller.vo.PageVO;
+import com.spring.boot.demo.controller.vo.UserVO;
 import com.spring.boot.demo.entity.User;
 import com.spring.boot.demo.enums.Limit;
 import com.spring.boot.demo.service.UserService;
 import com.spring.boot.demo.utils.DateUtils;
 import com.spring.boot.demo.utils.ExcelUtils;
 import com.spring.boot.demo.utils.Result;
+import com.spring.boot.demo.utils.ThreadLocalUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -88,12 +90,18 @@ public class UserController {
 
     @GetMapping("{id}")
     public Result<User> getById(@PathVariable Long id) {
+        log.info("traceId: {}", ThreadLocalUtils.getTraceId());
         return Result.ok(userService.getById(id));
     }
 
     @PostMapping("page")
-    public IPage<User> getById(@RequestBody PageVO<User> pageVO) {
+    public IPage<User> page(@RequestBody PageVO<User> pageVO) {
         return userService.page(pageVO);
+    }
+
+    @PostMapping("rolePage")
+    public IPage<UserVO> rolePage(@RequestBody PageVO<UserVO> pageVO) {
+        return userService.rolePage(pageVO);
     }
 
     @GetMapping("export")

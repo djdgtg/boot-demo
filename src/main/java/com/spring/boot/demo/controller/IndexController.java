@@ -29,8 +29,7 @@ public class IndexController {
 
     @GetMapping("favicon.ico")
     @ResponseBody
-    public String favicon() {
-        return "favicon.ico";
+    public void favicon() {
     }
 
 }
