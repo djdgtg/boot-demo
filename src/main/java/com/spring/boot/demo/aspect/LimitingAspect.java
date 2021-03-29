@@ -1,6 +1,6 @@
 package com.spring.boot.demo.aspect;
 
-import com.spring.boot.demo.enums.Limit;
+import com.spring.boot.demo.aspect.enums.Limit;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -35,7 +35,7 @@ public class LimitingAspect {
         this.limitRedisTemplate = limitRedisTemplate;
     }
 
-    @Before("@annotation(com.spring.boot.demo.enums.Limit) && @annotation(limit)")
+    @Before("@annotation(com.spring.boot.demo.aspect.enums.Limit) && @annotation(limit)")
     public void limit(Limit limit) {
         String name = limit.name();
         String key = getIpAddress();

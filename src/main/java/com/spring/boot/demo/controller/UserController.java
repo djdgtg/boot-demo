@@ -1,16 +1,14 @@
 package com.spring.boot.demo.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.spring.boot.demo.aspect.enums.Limit;
 import com.spring.boot.demo.controller.vo.PageVO;
 import com.spring.boot.demo.controller.vo.UserVO;
 import com.spring.boot.demo.entity.User;
-import com.spring.boot.demo.enums.Limit;
 import com.spring.boot.demo.service.UserService;
 import com.spring.boot.demo.utils.DateUtils;
 import com.spring.boot.demo.utils.ExcelUtils;
 import com.spring.boot.demo.utils.Result;
-import com.spring.boot.demo.utils.ThreadLocalUtils;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +34,6 @@ import java.util.concurrent.TimeUnit;
  * @author qinchao
  * @since 2020-12-01 14:45:28
  */
-@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -90,7 +87,6 @@ public class UserController {
 
     @GetMapping("{id}")
     public Result<User> getById(@PathVariable Long id) {
-        log.info("traceId: {}", ThreadLocalUtils.getTraceId());
         return Result.ok(userService.getById(id));
     }
 

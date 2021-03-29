@@ -7,7 +7,6 @@ import com.spring.boot.demo.mapper.MenuMapper;
 import com.spring.boot.demo.mapper.UserMapper;
 import com.spring.boot.demo.service.ShiroService;
 import org.apache.shiro.util.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
@@ -25,11 +24,14 @@ import java.util.Set;
 @Service
 public class ShiroServiceImpl implements ShiroService {
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
-    @Autowired
-    private MenuMapper menuMapper;
+    private final MenuMapper menuMapper;
+
+    public ShiroServiceImpl(MenuMapper menuMapper, UserMapper userMapper) {
+        this.menuMapper = menuMapper;
+        this.userMapper = userMapper;
+    }
 
     @Override
     public Map<String, String> loadShiroFilter() {

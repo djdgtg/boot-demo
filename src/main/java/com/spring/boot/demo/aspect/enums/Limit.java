@@ -1,4 +1,4 @@
-package com.spring.boot.demo.enums;
+package com.spring.boot.demo.aspect.enums;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

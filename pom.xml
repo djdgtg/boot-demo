@@ -35,20 +35,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>asm</artifactId>
-                    <groupId>org.ow2.asm</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>accessors-smart</artifactId>
-                    <groupId>net.minidev</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>json-path</artifactId>
-                    <groupId>com.jayway.jsonpath</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
